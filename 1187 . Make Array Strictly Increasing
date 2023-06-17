@@ -1,0 +1,22 @@
+ int makeArrayIncreasing(vector<int>& arr1, vector<int>& arr2) 
+ {
+       sort(arr2.begin(),arr2.end());
+        int n=arr1.size(),m=unique(arr2.begin(),arr2.end())-arr2.begin();
+        int g[n],f[n][m];
+        memset(g,0,sizeof(g));
+        memset(f,0,sizeof(f));
+        for(int i=1;i<n;i++){
+            g[i]=arr1[i]>arr1[i-1]?g[i-1]:2e9;
+            for(int j=0;j<m;j++){
+                if(arr2[j]<arr1[i]){
+                    g[i]=min(g[i],1+f[i-1][j]);
+                }
+                f[i][j]=arr2[j]>arr1[i-1]?g[i-1]:2e9;
+                if(j!=0){
+                    f[i][j]=min(f[i][j],1+f[i-1][j-1]);
+                }
+            }
+        }
+        int ans=min(g[n-1],1+f[n-1][m-1]);
+        return ans==2e9?-1:ans; 
+    }
