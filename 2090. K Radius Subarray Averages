@@ -1,0 +1,21 @@
+vector<int> getAverages(vector<int>& nums, int k) {
+        
+        int n = nums.size();
+        vector<int> ans(n, -1);
+        if(n < 2*k+1) return ans;
+        long long sum = 0, l = 0, r = 0;
+        int w_size = 2*k + 1;
+        
+        
+        while(r < n){
+            sum += nums[r];
+            if(r-l+1 >= w_size) {
+                ans[(r+l)/2] = sum/w_size;
+                sum -= nums[l];
+                l++;
+            }
+            r++;
+        }
+
+        return ans;
+    }
