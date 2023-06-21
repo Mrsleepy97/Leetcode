@@ -1,0 +1,41 @@
+ long long minCost(vector<int>& nums, vector<int>& cost) {
+        
+         int n = nums.size();
+        vector<pair<long long, long long>> pairs(n);
+        for (int i = 0; i < n; i++){
+            pairs[i] = {nums[i], cost[i]};
+        }
+        sort(pairs.begin(), pairs.end());
+        vector<long long> prefix_c(n);
+        vector<long long> prefix_vc(n);
+        for (int i = 0; i < n; i++){
+            if (i > 0) {
+                prefix_c[i] = prefix_c[i - 1] + pairs[i].second;
+                prefix_vc[i] = prefix_vc[i - 1] + pairs[i].first * pairs[i].second;
+            }
+            else {
+                prefix_c[i] = pairs[i].second;
+                prefix_vc[i] = pairs[i].first * pairs[i].second;
+            }
+        }
+        long long ret = prefix_vc[n - 1];
+        for (int i = 0; i < n; i++){
+            long long target = pairs[i].first;
+            long long left = 0, right = 0, sum = 0;
+            if (i == 0){
+                right = (prefix_vc[n - 1] - prefix_vc[0]) - target * (prefix_c[n - 1] - prefix_c[0]);
+                sum = right;
+            }
+            else if (i == n - 1){
+                left = target * (prefix_c[n - 2]) - prefix_vc[n - 2];
+                sum = left;
+            }
+            else{
+                left = target * (prefix_c[i - 1]) - prefix_vc[i - 1];
+                right = (prefix_vc[n - 1] - prefix_vc[i]) - target * (prefix_c[n - 1] - prefix_c[i]);
+                sum = left + right;
+            }
+            ret = min(ret, sum);
+        }
+        return ret;
+    }
