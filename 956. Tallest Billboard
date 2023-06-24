@@ -1,0 +1,25 @@
+ // Knapsack Solution
+    // Time Complexity : O(N* sum)
+    
+     int tallestBillboard(vector<int>& rods) 
+     {
+        vector<int>dp(10001,-1);
+         dp[5000] = 0;
+         
+         for(int r:rods)
+         {
+             vector<int>dp2 = dp;
+             
+             for(int i=0;i<dp.size();i++)
+             {
+                 if(dp[i]<0)
+                     continue;
+                 
+                 dp2[i-r] = max(dp2[i-r],dp[i]+r);
+                 
+                 dp2[i+r] = max(dp2[i+r],dp[i]+r);
+             }
+             swap(dp,dp2);
+         }
+         return dp[5000]/2;
+     }
