@@ -1,0 +1,30 @@
+// Time Complexity: O(N^2 * F), Where N stand for the number of cities and F stands for initial fuel
+// Space Complexity : O(NF)
+
+ int mod = 1e9+7;
+    
+    int dfs(int start,int fuel,int& finish,vector<int>& locations,int n,vector<vector<int>>& dp)
+    {
+        if(dp[start][fuel] != -1)
+            return dp[start][fuel];
+        
+        int ans = (start == finish);
+        for(int i=0;i<n;i++)
+        {
+            if(start != i)
+            {
+                if(abs(locations[start] - locations[i]) <= fuel)
+                {
+                    ans += dfs(i,fuel - abs(locations[start] - locations[i]),finish,locations,n,dp);
+                    ans %= mod;
+                }
+            }
+        }
+        return dp[start][fuel] = ans;
+    }
+    int countRoutes(vector<int>& locations, int start, int finish, int fuel) {
+        
+        int n = locations.size();
+        vector<vector<int>>dp(n,vector<int>(fuel+1,-1));
+        return dfs(start,fuel,finish,locations,n,dp);
+    }
