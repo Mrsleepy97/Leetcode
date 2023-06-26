@@ -1,0 +1,35 @@
+class Compare {
+    public:
+       bool operator()(pair<int,int> a, pair<int,int> b){
+           if(a.first>b.first) return true;
+           else if(a.first == b.first) return a.second>b.second;
+           else return false;
+      }
+};
+
+
+class Solution {
+public:
+    long long totalCost(vector<int>& costs, int k, int candidates) {
+        
+        priority_queue<pair<int, int>, vector<pair<int,int>>, Compare> pq;
+        int left = 0, right = costs.size()-1;
+        for(;left<candidates; left++)
+            pq.push({costs[left], left});
+        for(; right>=left && right>=(costs.size()-candidates); right--)
+            pq.push({costs[right], right});
+        long long cost = 0;
+        while(k){
+            pair<int, int> t = pq.top();
+            pq.pop();
+            cost = cost + t.first;
+            if(t.second > right && right>=left)
+                pq.push({costs[right], right--});
+            else if(t.second < left && left <= right)
+                pq.push({costs[left], left++});
+
+            k--;
+        }
+        return cost;
+    }
+};
