@@ -1,0 +1,56 @@
+ bool dfs(int row,int col,vector<vector<int>>&grid1){
+        int n=grid1.size(),m=grid1[0].size();
+        if(row<0||row>=n||col<0||col>=m||grid1[row][col]!=0){
+            return 0;
+        }
+        if(grid1[row][col]==1){
+            return 0;
+        }
+        if(row==n-1){
+            return 1;
+        }
+        grid1[row][col]=-1;
+        vector<pair<int,int>>dir={{-1,0},{0,-1},{1,0},{0,1}};
+        for(auto ele:dir){
+            int nr=row+ele.first;
+            int nc=col+ele.second;
+            if(dfs(nr,nc,grid1)){
+                return 1;
+            }
+        }
+        return 0;
+    }
+    
+    int latestDayToCross(int row, int col, vector<vector<int>>& cells) {
+        
+        int ans=0;
+        vector<vector<int>>grid(row,vector<int>(col,0));
+        int n=cells.size();
+        int l=0,r=n-1;
+        while(l<=r){
+            int mid=l+(r-l)/2;
+            vector<vector<int>>grid1(row,vector<int>(col,0));
+            for(int i=0;i<=mid;i++){
+                int x=cells[i][0],y=cells[i][1];
+                grid1[x-1][y-1]=1;
+            }
+            vector<vector<int>>vis(row,vector<int>(col,0));
+            bool can_go=0;
+            for(int i=0;i<col;i++){
+                if(!vis[0][i]){
+                    if(dfs(0,i,grid1)){
+                        can_go=1;
+                        break;
+                    }
+                }
+            }
+            if(can_go){
+                ans=mid;
+                l=mid+1;
+            }
+            else{
+                r=mid-1;
+            }
+        }
+        return ans+1;
+    }
