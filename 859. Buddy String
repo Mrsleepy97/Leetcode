@@ -1,0 +1,41 @@
+    // Time Complexity : O(N)
+    // Space Complexity : O(1) in best case and O(N) in worst case
+    /*
+        In the best case, when s and goal are identical and there are no duplicates, the space used is constant, as we only need a few extra variables to perform the checks. In the worst case, when s and goal are not identical and all characters are unique, we need to store the characters in the uniqueChars set, which can take up to O(n) space. 
+    */
+    
+    bool buddyStrings(string s, string goal) {
+        
+        // Check if the lengths of s and goal are equal
+        if (s.length() != goal.length()) {
+            return false;
+        }
+
+        // Check if s and goal are identical
+        if (s == goal) {
+            // Create a set to check for duplicate characters in s
+            std::unordered_set<char> uniqueChars;
+            for (char ch : s) {
+                if (uniqueChars.count(ch) > 0) {
+                    return true;  // Found a duplicate, can swap to get goal
+                }
+                uniqueChars.insert(ch);
+            }
+            return false;  // No duplicates, cannot swap to get goal
+        }
+
+        // Find the positions where s and goal differ
+        int diffCount = 0;
+        int diffPos[2];
+        for (int i = 0; i < s.length(); i++) {
+            if (s[i] != goal[i]) {
+                if (diffCount >= 2) {
+                    return false;  // More than two differences, cannot swap to get goal
+                }
+                 diffPos[diffCount++] = i;
+        }
+    }
+    
+    // Check if the characters at the differing positions can be swapped to get goal
+    return (diffCount == 2 && s[diffPos[0]] == goal[diffPos[1]] && s[diffPos[1]] == goal[diffPos[0]]);
+    }
