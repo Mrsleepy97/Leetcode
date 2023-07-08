@@ -1,0 +1,27 @@
+ long long putMarbles(vector<int>& weights, int k) {
+        
+        if(k == 1 || k == weights.size()) 
+            return 0;
+         long long int ans = 0;
+         long long int ans1 = 0;
+         k--;
+        
+         vector<long long int>result1;
+        
+          for(long long int i = 0;i<weights.size()-1;i++)
+            result1.push_back(weights[i] + weights[i+1]);
+        
+          vector<long long int>result;
+          for(long long int i = 0;i<weights.size()-1;i++)
+          {
+              result.push_back(weights[i] + weights[i+1]);
+          }
+          sort(result1.begin() , result1.end() , greater<long long int>());
+          sort(result.begin() , result.end());
+        
+        for(long long int i =0;i<k;i++) 
+            ans1 += result1[i];
+        for(long long int i =0;i<k;i++) 
+            ans += result[i];
+        return (ans1 - ans);
+    }
